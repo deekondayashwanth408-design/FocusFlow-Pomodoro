@@ -1,0 +1,540 @@
+:root {
+  --primary: #ef4444;
+  --primary-hover: #dc2626;
+  --bg-color: #f4f4f5;
+  --card-bg: #ffffff;
+  --text-main: #18181b;
+  --text-muted: #71717a;
+  --border-color: #e4e4e7;
+  --ring-bg: #f4f4f5;
+  --danger: #ef4444;
+  --sidebar-w: 260px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #09090b;
+    --card-bg: #18181b;
+    --text-main: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --border-color: #27272a;
+    --ring-bg: #27272a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w);
+  background-color: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+}
+
+.brand {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  color: var(--primary);
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-links button {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links button:hover {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+}
+
+.nav-links button.active {
+  background-color: var(--primary);
+  color: #fff;
+}
+
+.badge {
+  background-color: rgba(0,0,0,0.1);
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 12px;
+}
+.active .badge { background-color: rgba(255,255,255,0.2); }
+
+/* MAIN CONTENT */
+.content {
+  flex: 1;
+  margin-left: var(--sidebar-w);
+  padding: 40px;
+  max-width: 1200px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* DASHBOARD */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.timer-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.timer-modes {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-color);
+  padding: 6px;
+  border-radius: 99px;
+}
+
+.timer-modes button {
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.timer-modes button.active {
+  background: var(--card-bg);
+  color: var(--text-main);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.timer-display-wrapper {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-ring {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.progress-ring::before {
+  content: "";
+  position: absolute;
+  top: 8px; left: 8px; right: 8px; bottom: 8px;
+  background: var(--card-bg);
+  border-radius: 50%;
+}
+
+.timer-display {
+  position: relative;
+  font-size: 64px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-main);
+}
+
+.current-task-display {
+  font-size: 16px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.current-task-display strong {
+  color: var(--text-main);
+  display: block;
+  font-size: 18px;
+  margin-top: 4px;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 12px;
+}
+
+/* DASHBOARD GRID */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.dashboard-grid h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.sound-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.sound-label {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 99px;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: 0.2s;
+}
+
+.sound-label input { display: none; }
+.sound-label.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.volume-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.volume-control input {
+  width: 100%;
+  accent-color: var(--primary);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-color);
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.stat-icon { font-size: 20px; margin-bottom: 8px; }
+.stat-value { font-size: 24px; font-weight: 700; color: var(--text-main); }
+.stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+/* TASKS & TRASH PAGE */
+h2 {
+  margin: 0 0 24px 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.page-header h2 { margin: 0; }
+
+.add-task-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+}
+
+.add-task-form input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: var(--text-main);
+  outline: none;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  transition: 0.2s;
+}
+
+.task-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.task-main input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.task-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.task-item.completed {
+  opacity: 0.6;
+}
+.task-item.completed .task-title {
+  text-decoration: line-through;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.task-pomodoros {
+  font-size: 13px;
+  color: var(--text-muted);
+  background: var(--bg-color);
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+
+.deleted-date {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: block;
+}
+.deleted-item .task-main {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+.empty-state p {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0 0 8px 0;
+}
+
+/* BUTTONS */
+button { font-family: inherit; }
+
+.primary-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.primary-btn:hover { background: var(--primary-hover); }
+
+.secondary-btn {
+  background: var(--bg-color);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.secondary-btn:hover { background: var(--border-color); }
+.secondary-btn.danger { color: var(--danger); border-color: rgba(239, 68, 68, 0.3); }
+.secondary-btn.danger:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--danger); }
+
+.focus-btn, .delete-btn, .restore-btn, .delete-perm-btn {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.focus-btn { color: var(--primary); background: rgba(239, 68, 68, 0.1); }
+.focus-btn:hover { background: rgba(239, 68, 68, 0.2); }
+
+.delete-btn { color: var(--text-muted); }
+.delete-btn:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+
+.restore-btn { color: #10b981; background: rgba(16, 185, 129, 0.1); }
+.restore-btn:hover { background: rgba(16, 185, 129, 0.2); }
+
+.delete-perm-btn { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+.delete-perm-btn:hover { background: rgba(239, 68, 68, 0.2); }
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 16px;
+  }
+  .brand { margin-bottom: 16px; text-align: center; }
+  .nav-links { flex-direction: row; flex-wrap: wrap; }
+  .nav-links button { padding: 8px 12px; }
+  
+  .content {
+    margin-left: 0;
+    padding: 16px;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .task-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* My Music */
+.music-upload {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.upload-btn {
+  width: 100%;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  background: var(--bg-color);
+  color: var(--text-main);
+  border: 1px dashed var(--border-color);
+}
+
+.upload-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.user-music-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-music-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-color);
+  border-radius: 8px;
+  transition: 0.2s;
+  border: 1px solid transparent;
+}
+
+.user-music-item.active {
+  border-color: var(--primary);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.music-name {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.music-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.play-music-btn {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--primary);
+}
