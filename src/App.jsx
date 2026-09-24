@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
+import Chatbot from "./Chatbot";
 
 const DEFAULT_FOCUS = 25 * 60;
 const DEFAULT_SHORT_BREAK = 5 * 60;
@@ -162,10 +163,18 @@ function App() {
     const shouldPlayUser = isFocus && isUserMusicPlaying;
     
     if (shouldPlayAmbient) {
-      if (audio.src && !audio.src.includes(ambientSound)) {
-        audio.src = `/sounds/${ambientSound}.mp3`;
-      } else if (!audio.src) {
-        audio.src = `/sounds/${ambientSound}.mp3`;
+      const SOUND_URLS = {
+        rain: "https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg",
+        forest: "https://actions.google.com/sounds/v1/ambiences/forest_day_with_birds.ogg",
+        coffee: "https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg",
+        ocean: "https://actions.google.com/sounds/v1/water/ocean_waves.ogg",
+        fireplace: "https://actions.google.com/sounds/v1/ambiences/fire.ogg",
+        lofi: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"
+      };
+
+      const url = SOUND_URLS[ambientSound];
+      if (audio.src !== url) {
+        audio.src = url;
       }
       
       const playPromise = audio.play();
@@ -764,6 +773,7 @@ function App() {
           </div>
         )}
       </main>
+      <Chatbot />
     </div>
   );
 }
