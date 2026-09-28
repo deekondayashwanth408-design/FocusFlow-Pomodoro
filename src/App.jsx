@@ -662,7 +662,10 @@ function App() {
                   className="task-input-text"
                 />
                 <input 
-                  type="datetime-local" 
+                  type={newTaskReminder ? "datetime-local" : "text"}
+                  onFocus={(e) => e.target.type = "datetime-local"}
+                  onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
+                  placeholder="Set date here"
                   value={newTaskReminder} 
                   onChange={(e) => setNewTaskReminder(e.target.value)}
                   className="task-input-date"
