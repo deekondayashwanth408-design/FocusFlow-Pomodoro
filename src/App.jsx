@@ -113,6 +113,9 @@ function App() {
     loadState("focusflow_ambient_volume", ["ambientVolume", "pomodoro_volume"], 50)
   );
 
+  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, message: "", onConfirm: null });
+  const closeConfirmDialog = () => setConfirmDialog({ isOpen: false, message: "", onConfirm: null });
+
   const [currentTaskId, setCurrentTaskId] = useState(null);
 
   // My Music State
@@ -415,15 +418,25 @@ function App() {
   };
 
   const deletePermanently = (id) => {
-    if (window.confirm("Delete this task permanently? This cannot be undone.")) {
-      setDeletedTasks(prev => prev.filter(t => t.id !== id));
-    }
+    setConfirmDialog({
+      isOpen: true,
+      message: "Delete this task permanently? This cannot be undone.",
+      onConfirm: () => {
+        setDeletedTasks(prev => prev.filter(t => t.id !== id));
+        closeConfirmDialog();
+      }
+    });
   };
 
   const emptyTrash = () => {
-    if (window.confirm("Empty all deleted tasks permanently?")) {
-      setDeletedTasks([]);
-    }
+    setConfirmDialog({
+      isOpen: true,
+      message: "Empty all deleted tasks permanently?",
+      onConfirm: () => {
+        setDeletedTasks([]);
+        closeConfirmDialog();
+      }
+    });
   };
 
   const focusTask = (id) => {
@@ -734,6 +747,19 @@ function App() {
         )}
       </main>
       <Chatbot />
+
+      {confirmDialog.isOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content card">
+            <h3>Confirm Action</h3>
+            <p>{confirmDialog.message}</p>
+            <div className="modal-actions">
+              <button className="cancel-btn" onClick={closeConfirmDialog}>Cancel</button>
+              <button className="confirm-btn danger-btn" style={{background: 'var(--primary)', color: 'white', border: 'none'}} onClick={confirmDialog.onConfirm}>Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
