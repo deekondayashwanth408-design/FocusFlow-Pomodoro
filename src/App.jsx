@@ -663,7 +663,10 @@ function App() {
                 />
                 <input 
                   type={newTaskReminder ? "datetime-local" : "text"}
-                  onFocus={(e) => e.target.type = "datetime-local"}
+                  onFocus={(e) => {
+                    e.target.type = "datetime-local";
+                    try { e.target.showPicker(); } catch(err) {}
+                  }}
                   onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
                   placeholder="Set date here"
                   value={newTaskReminder} 
