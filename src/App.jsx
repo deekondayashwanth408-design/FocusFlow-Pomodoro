@@ -89,14 +89,13 @@ function App() {
     return defaultValue;
   };
 
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => 
+    loadState("focusflow_tasks", ["tasks", "pomodoro_tasks"], [])
+  );
   
   useEffect(() => {
-    fetch('http://localhost:5000/api/tasks')
-      .then(res => res.json())
-      .then(data => setTasks(data))
-      .catch(err => console.error('Error fetching tasks:', err));
-  }, []);
+    localStorage.setItem("focusflow_tasks", JSON.stringify(tasks));
+  }, [tasks]);
   
   const [deletedTasks, setDeletedTasks] = useState(() => 
     loadState("focusflow_recently_deleted", ["recentlyDeleted", "pomodoro_recently_deleted"], [])
@@ -248,15 +247,7 @@ function App() {
   };
 
   const saveSession = (duration, sessionType) => {
-    fetch('http://localhost:5000/api/pomodoro/complete', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        taskId: currentTaskId,
-        duration: duration,
-        sessionType: sessionType
-      })
-    }).catch(err => console.error('Error saving session:', err));
+    // Analytics saved to localStorage via completedPomodoros
   };
 
   // Timer Controls
@@ -401,46 +392,20 @@ function App() {
       reminderTriggered: false
     };
 
-    fetch('http://localhost:5000/api/tasks', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newTask)
-    })
-    .then(res => res.json())
-    .then(data => {
-      setTasks([data, ...tasks]);
-      setNewTaskTitle("");
-      setNewTaskReminder("");
-    })
-    .catch(err => console.error('Error adding task:', err));
+    setTasks([newTask, ...tasks]);
+    setNewTaskTitle("");
+    setNewTaskReminder("");
   };
 
   const toggleTaskCompletion = (id) => {
-    const task = tasks.find(t => t.id === id);
-    if (!task) return;
-    
-    fetch(`http://localhost:5000/api/tasks/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ completed: !task.completed })
-    })
-    .then(() => {
-      setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
-    })
-    .catch(err => console.error('Error toggling task:', err));
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
   };
 
   const deleteTask = (task) => {
     if (currentTaskId === task.id) setCurrentTaskId(null);
     
-    fetch(`http://localhost:5000/api/tasks/${task.id}`, {
-      method: 'DELETE'
-    })
-    .then(() => {
-      setTasks(prev => prev.filter(t => t.id !== task.id));
-      setDeletedTasks(prev => [{ ...task, deletedAt: new Date().toISOString() }, ...prev]);
-    })
-    .catch(err => console.error('Error deleting task:', err));
+    setTasks(prev => prev.filter(t => t.id !== task.id));
+    setDeletedTasks(prev => [{ ...task, deletedAt: new Date().toISOString() }, ...prev]);
   };
 
   const restoreTask = (task) => {
@@ -486,16 +451,11 @@ function App() {
   const completedTasksCount = tasks.filter(t => t.completed).length;
   const currentTask = tasks.find(t => t.id === currentTaskId);
   
-  const [statsData, setStatsData] = useState({});
-
-  useEffect(() => {
-    if (currentPage === "stats") {
-      fetch('http://localhost:5000/api/pomodoro/stats')
-        .then(res => res.json())
-        .then(data => setStatsData(data))
-        .catch(err => console.error('Error fetching stats:', err));
-    }
-  }, [currentPage]);
+  const statsData = {
+    todayPomodoros: completedPomodoros,
+    todayFocusTime: completedPomodoros * DEFAULT_FOCUS,
+    activeTasks: activeTasksCount
+  };
 
   return (
     <div className="app-container">
