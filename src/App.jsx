@@ -667,8 +667,11 @@ function App() {
                     e.target.type = "datetime-local";
                     try { e.target.showPicker(); } catch(err) {}
                   }}
+                  onClick={(e) => {
+                    try { e.target.showPicker(); } catch(err) {}
+                  }}
                   onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
-                  placeholder="Set date here"
+                  placeholder="Set date and time"
                   value={newTaskReminder} 
                   onChange={(e) => setNewTaskReminder(e.target.value)}
                   className="task-input-date"
