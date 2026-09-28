@@ -652,20 +652,20 @@ function App() {
             <h2>Today's Tasks</h2>
             
             <form className="add-task-form card" onSubmit={addTask}>
-              <div className="add-task-inputs" style={{display: 'flex', gap: '10px', width: '100%'}}>
+              <div className="add-task-inputs">
                 <input 
                   type="text" 
                   placeholder="What are you working on?" 
                   value={newTaskTitle} 
                   onChange={(e) => setNewTaskTitle(e.target.value)} 
                   autoFocus
-                  style={{flex: 1}}
+                  className="task-input-text"
                 />
                 <input 
                   type="datetime-local" 
                   value={newTaskReminder} 
                   onChange={(e) => setNewTaskReminder(e.target.value)}
-                  style={{padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-main)', outline: 'none'}}
+                  className="task-input-date"
                   title="Set Reminder (Optional)"
                 />
               </div>

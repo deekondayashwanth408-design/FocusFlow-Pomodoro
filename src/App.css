@@ -551,3 +551,10 @@ button { font-family: inherit; }
 .modal-actions .cancel-btn:hover { background: var(--bg-hover); }
 .modal-actions .confirm-btn { background: var(--primary); color: white; }
 .modal-actions .confirm-btn:hover { background: #e03a45; }
+
+
+/* Responsive Task Form fixes */
+.add-task-inputs { display: flex; gap: 10px; width: 100%; }
+.task-input-text { flex: 1; }
+.task-input-date { padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); outline: none; }
+@media (max-width: 768px) { .add-task-form { flex-direction: column; } .add-task-inputs { flex-direction: column; } .add-task-form button { width: 100%; } .task-meta { flex-wrap: wrap; gap: 10px; } }
