@@ -382,9 +382,19 @@ function App() {
             if (now >= reminderTime) {
               updated = true;
               if (Notification.permission === "granted") {
-                new Notification("FocusFlow Reminder", {
-                  body: `It's time to start: ${task.title}`
-                });
+                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                  navigator.serviceWorker.ready.then(reg => {
+                    reg.showNotification("FocusFlow Reminder", {
+                      body: `It's time to start: ${task.title}`,
+                      icon: '/vite.svg',
+                      vibrate: [200, 100, 200]
+                    });
+                  }).catch(() => {
+                    new Notification("FocusFlow Reminder", { body: `It's time to start: ${task.title}` });
+                  });
+                } else {
+                  new Notification("FocusFlow Reminder", { body: `It's time to start: ${task.title}` });
+                }
               } else {
                 alert(`FocusFlow Reminder: It's time to start "${task.title}"`);
               }
