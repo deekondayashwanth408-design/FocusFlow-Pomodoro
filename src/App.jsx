@@ -113,6 +113,30 @@ function App() {
     loadState("focusflow_ambient_volume", ["ambientVolume", "pomodoro_volume"], 50)
   );
 
+  const [theme, setTheme] = useState(() => 
+    loadState("focusflow_theme", [], "system")
+  );
+
+  useEffect(() => {
+    localStorage.setItem("focusflow_theme", JSON.stringify(theme));
+    if (theme === "dark") {
+      document.documentElement.className = "dark-theme";
+    } else if (theme === "light") {
+      document.documentElement.className = "light-theme";
+    } else {
+      document.documentElement.className = "";
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    if (theme === "dark") setTheme("light");
+    else if (theme === "light") setTheme("dark");
+    else {
+      const isSystemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      setTheme(isSystemDark ? "light" : "dark");
+    }
+  };
+
   const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, message: "", onConfirm: null });
   const closeConfirmDialog = () => setConfirmDialog({ isOpen: false, message: "", onConfirm: null });
 
@@ -472,6 +496,9 @@ function App() {
 
   return (
     <div className="app-container">
+      <button className="theme-toggle" onClick={toggleTheme} title="Toggle Theme">
+        {theme === "dark" || (theme === "system" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "☀️" : "🌙"}
+      </button>
       <nav className="sidebar">
         <div className="brand">🍅 FocusFlow</div>
         <ul className="nav-links">
